@@ -1,0 +1,23 @@
+#format file [namalaporan]=[filetujuan]=[alt onmouseover]
+01_AREAL STATEMENT=lbm_aresta=AREAL STATEMENT
+
+051 PRODUKSI (TON)=lbm_produksi_ton=PRODUKSI
+053 CURAH HUJAN=lbm_curah_hujan=CURAH HUJAN
+06_OUTPUT POTONG BUAH=lbm_output_potong_buah=OUTPUT POTONG BUAH
+07_PUSINGAN POTONG BUAH=lbm_pusingan_potong_buah=PUSINGAN POTONG BUAH
+071ROTASI POTONG BUAH=lbm_rotasi_potong_buah=ROTASI POTONG BUAH
+
+10_PEMELIHARAAN TM (HA-HK)=lbm_pemeliharan_tm=PEMELIHARAAN TM (HA-HK)
+11_PEMELIHARAAN TBM (HA-HK)=lbm_pemeliharan_tbm=PEMELIHARAAN TBM (HA-HK)
+12_PEMELIHARAAN TM dan TBM (LTR-KG-HA)=lbm_pemeliharan_tbm_ltrkgha=PEMELIHARAAN TM dan TBM (LTR-KG-HA)
+132 STOK PUPUK DAN KCNGN=lbm_pupuk_agro_kacangan=STOK PUPUK,AGROCHEMICAL DAN KACANGAN
+17_PENGIRIMAN BIBIT=lbm_pengiriman_bibit=PENGIRIMAN BIBIT
+
+24_BIAYA OVER HEAD=lbm_biaya_overhead
+
+251 TRAKSI DAN WORK SHOP=lbm_traksi_dan_ws=TRAKSI DAN WORK SHOP
+252 KENDARAAN=lbm_kendaraan=KENDARAAN
+
+REKAP BIAYA TM=lbm_analisa_biayapemeliharaan=LBA REKAP BIAYA TM
+REKAP BIAYA TB=lbm_analisa_biayapemeliharaan_tb=LBA REKAP BIAYA TB
+BJR=lbm_bjr=LBA BJR

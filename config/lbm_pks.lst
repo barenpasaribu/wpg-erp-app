@@ -1,0 +1,9 @@
+#format file [namalaporan]=[filetujuan]=[alt onmouseover]
+COVER=lbm_sampul=SAMPUL LAPORAN
+PEMAKAIAN BAHAN KIMIA dan BBM=lbm_pks_kimiadanbbm=PEMAKAIAN BAHAN KIMIA
+REKAPITULASI BIAYA  PRODUKSI=lbm_pks_rekap_byproduksi=REKAPITULASI  TOTAL BIAYA  PRODUKSI
+BIAYA ADMINISTRASI=lbm_pks_byadministrasi=BIAYA ADMINISTRASI
+BIAYA PENGOLAHAN=lbm_pks_bypengolahan=BIAYA PENGOLAHAN
+BIAYA PERAWATAN=lbm_pks_byperawatan=BIAYA PERAWATAN
+BIAYA PENJUALAN=lbm_pksbypenjualan=BIAYA PENJUALAN
+BIAYA PRODUKSI/STATION=lbm_pks_byproduksiperstation=BIAYA PRODUKSI/STATION

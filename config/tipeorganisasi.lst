@@ -1,0 +1,16 @@
+#TIPE=KETERANGAN
+AFDELING=Afdeling atau Divisi
+BIBITAN=Bibitan
+BLOK=Blok dalam afdeling
+GUDANG=Gudang Sentral/Berdiri Sendiri
+GUDANGTEMP=Gudang Semu (dikelola oleh system)
+HOLDING=Group Perusahaan terdiri dari beberapa PT
+KANWIL=Kantor Wilayah/Area Kontroller
+KEBUN=Kebun/Estate
+PABRIK=Pabrik/Mill
+PT=Perseroan
+SIPIL=Sipil Traksi
+STATION=Stasiun dalam Pabrik
+STENGINE=Mesin dalam Stasiun
+TRAKSI=Divisi Transportasi,Mesin dan Alat Berat
+WORKSHOP=Bengkel Sentral

@@ -1,0 +1,33 @@
+<html>
+<head> 
+
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="drag.js"></script>
+<style>
+#exc {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  background: red;
+  color: white;
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+</style>
+</head>
+<body>
+<script>
+	 
+$(function() {
+
+	$('#exc').filter(':not(.with-handle)').drags();
+	//$('#wrap-left .with-handle').drags({handle:"strong"});
+
+});
+
+</script>
+<div id="exc">test</div>
+</body>
+</html>

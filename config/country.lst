@@ -1,0 +1,220 @@
+#Country=Currency=CountryCode=Continent
+Indonesia=IDR=ID=Asia
+Afghanistan=AFA=AF=Asia
+Albania=ALL=AL=East Europe
+Algeria=DZD=DZ=Africa
+American Samoa=USD=AS=Pacific
+Andorra=EUR=AD=Occidental Europe
+Angola=AON=AO=Africa
+Anguilla=XCD=AI=Caraibes
+Antigua and Barbuda=XCD=AG=Caraibes
+Argentina=ARS=AR=South and central America
+Aruba=AWG=AW=Caraibes
+Australia=AUD=AU=Pacific
+Austria=EUR=AT=Occidental Europe
+Bahamas=BSD=BS=Caraibes
+Bahrain=BHD=BH=Middle east
+Banglades=BDT=BD=Asia
+Barbados=BBD=BB=Caraibes
+Belgium=EUR=BE=Occidental Europe
+Belize=BZD=BZ=Caraibes
+Benin=XOF=BJ=Africa
+Bermuda=BMD=BM=Caraibes
+Bhutan=BTN=BT=Asia
+Bolivia=BOB=BO=South and central America
+Botswana=BWP=BW=Africa
+Bouvet Island=NOK=BV=Antarctica
+Brazil=BRL=BR=South and central America
+British Indian O. Terr.=GBP=IO=Asia
+British Virgin Islands=USD=VG=Caraibes
+Brunei Darussalam=BND=BN=Middle east
+Bulgaria=BGL=BG=East Europe
+Burkina Faso=XOF=BF=Africa
+Burundi=BIF=BI=Africa
+Cambodia=KHR=KH=Asia
+Cameroon=XAF=CM=Africa
+Canada=CAD=CA=North America
+Cape Verde=CVE=CV=Africa
+Cayman Islands=KYD=KY=Caraibes
+Central African Rep.=XAF=CF=Africa
+Chad=XAF=TD=Africa
+Chile=CLP=CL=South and central America
+China=CNY=CN=Asia
+Christmas Island=AUD=CX=Pacific
+Cocos (Keeling) Islands=AUD=CC=Pacific
+Colombia=COP=CO=South and central America
+Comoros=KMF=KM=Africa
+Congo=XAF=CG=Africa
+Cook Islands=NZD=CK=Pacific
+Costa Rica=CRC=CR=South and central America
+Croatia=HRK=HR=East Europe
+Cuba=CUP=CU=Caraibes
+Cyprus=EUR=CY=Occidental Europe
+Czech Republic=CZK=CZ=East Europe
+Denmark=DKK=DK=Occidental Europe
+Djibouti=DJF=DJ=Africa
+Dominica=XCD=DM=Caraibes
+Dominican Republic=DOP=DO=Caraibes
+East Timor=IDR=TP=Asia
+Ecuador=ECS=EC=South and central America
+Egypt=EGP=EG=Middle east
+El Salvador=SVC=SV=South and central America
+Estonia=EEK=EE=East Europe
+Ethiopia=ETB=ET=Africa
+European Union=EUR=EU=Occidental Europe
+Falkland Isl., Malvinas=FKP=FK=Antarctica
+Faroe Islands=DKK=FO=Occidental Europe
+Fiji=FJD=FJ=Pacific
+Finland=EUR=FI=Occidental Europe
+France=EUR=FR=Occidental Europe
+France, Metropolitan=EUR=FR=Occidental Europe
+French Guiana=EUR=GF=South and central America
+French Southern Terr.=EUR=TF=Antarctica
+Gabon=XAF=GA=Africa
+Gambia=GMD=GM=Africa
+Germany=EUR=DE=Occidental Europe
+Ghana=GHC=GH=Africa
+Gibraltar=GIP=GI=Occidental Europe
+Great Britain (cf; UK)=GBP=UK=Occidental Europe
+Greece=GRD=GR=Occidental Europe
+Greenland=DKK=GL=North America
+Grenada=XCD=GD=Caraibes
+Guadaloupe=EUR=GP=Caraibes
+Guam (US)=USD=GU=Pacific
+Guatemala=GTQ=GT=South and central America
+Guinea=GNF=GN=Africa
+Guinea Bissau=XAF=GW=Africa
+Guyana=GYD=GY=South and central America
+Haiti=HTG=HT=Caraibes
+Heard and McDonald Isl.=AUD=HM=Pacific
+Honduras=HNL=HN=South and central America
+Hong Kong=HKD=HK=Asia
+Hungary=HUF=HU=East Europe
+Iceland=ISK=IS=Occidental Europe
+India=INR=IN=Asia
+Iran=IRR=IR=Middle east
+Iraq=IQD=IQ=Middle east
+Ireland=EUR=IE=Occidental Europe
+Israel=ILS=IL=Middle east
+Italy=EUR=IT=Occidental Europe
+Ivory Coast=XOF=CI=Africa
+Jamaica=JMD=JM=Caraibes
+Japan=JPY=JP=Asia
+Jordan=JOD=JO=Middle east
+Kazachstan=KZT=KZ=Asia
+Kenya=KES=KE=Africa
+Kiribati=AUD=KI=Pacific
+Kuwait=KWD=KW=Middle east
+Laos=LAK=LA=Asia
+Latvia=LVL=LV=East Europe
+Lebanon=LBP=LB=Middle east
+Liberia=LRD=LR=Africa
+Libya=LYD=LY=Africa
+Liechtenstein=CHF=LI=Occidental Europe
+Lithuania=LTL=LT=East Europe
+Luxembourg=EUR=LU=Occidental Europe
+Macau=MOP=MO=Asia
+Madagascar=MGF=MG=Africa
+Malawi=MWK=MW=Africa
+Malaysia=MYR=MY=Asia
+Maldives=MVR=MV=Asia
+Malta=EUR=MT=Occidental Europe
+Martinique=EUR=MQ=Caraibes
+Mauritania=MRO=MR=Africa
+Mauritius=MUR=MU=Africa
+Mayotte=EUR=YT=Africa
+Mexico=MXN=MX=South and central America
+Micronesia=USD=FM=Pacific
+Monaco=EUR=MC=Occidental Europe
+Mongolia=MNT=MN=Asia
+Montserrat=XCD=MS=Caraibes
+Morocco=MAD=MA=Africa
+Mozambique=MZM=MZ=Africa
+Myanmar=MMK=MM=Asia
+Namibia=NAD=NA=Africa
+Nauru=AUD=NR=Pacific
+Nepal=NPR=NP=Asia
+Netherland Antilles=ANG=AN=Caraibes
+Netherlands=EUR=NL=Occidental Europe
+New Zealand=NZD=NZ=Pacific
+Nicaragua=NIO=NI=South and central America
+Niger=XOF=NE=Africa
+Nigeria=NGN=NG=Africa
+Niue=NZD=NU=Pacific
+Norfolk Island=AUD=NF=Pacific
+North Korea=KPW=KP=Asia
+Norway=NOK=NO=Occidental Europe
+Oman=OMR=OM=Middle east
+Pakistan=PKR=PK=Asia
+Palau=USD=PW=Pacific
+Panama=PAB=PA=Pacific
+Papua New Guinea=PGK=PG=Asia
+Paraguay=PYG=PY=South and central America
+Peru=PEN=PE=South and central America
+Philippines=PHP=PH=Asia
+Pitcairn=NZD=PN=Pacific
+Poland=PLN=PL=East Europe
+Portugal=EUR=PT=Occidental Europe
+Puerto Rico=USD=PR=Caraibes
+Qatar=QAR=QA=Middle east
+Reunion=EUR=RE=Africa
+Romania=ROL=RO=East Europe
+Russian Federation=RUB=RU=East Europe
+Saint Lucia=XCD=LC=Caraibes
+Saint Pierre and Miquelon=EUR=PM=North America
+San Marino=EUR=SM=Occidental Europe
+Saudi Arabia=SAR=SA=Middle east
+Senegal=XOF=SN=Africa
+Seychelles=SCR=SC=Africa
+Sierra Leone=SLL=SL=Africa
+Singapore=SGD=SG=Asia
+Slovakia=EUR=SK=East Europe
+Slovenia=EUR=SI=East Europe
+Solomon Islands=SBD=SB=Pacific
+Somalia=SOS=SO=Africa
+South Africa=ZAR=ZA=Africa
+South Korea=KRW=KR=Asia
+Soviet Union=RUB=RU=East Europe
+Spain=EUR=ES=Occidental Europe
+Sri Lanka=LKR=LK=Asia
+St. Helena=SHP=SH=Africa
+St. Tome and Principe=STD=ST=Africa
+St.Kitts Nevis Anguilla=XCD=KN=Caraibes
+St.Vincent and Grenadines=XCD=VC=Caraibes
+Sudan=SDD=SD=Africa
+Sudan=SDP=SD=Africa
+Suriname=SRG=SR=South and central America
+Svalbard and Jan Mayen Is=NOK=SJ=Occidental Europe
+Swaziland=SZL=SZ=Africa
+Sweden=SEK=SE=Occidental Europe
+Switzerland=CHF=CH=Occidental Europe
+Syria=SYP=SY=Middle east
+Taiwan=NTD=TW=Asia
+Tanzania=TZS=TZ=Africa
+Thailand=THB=TH=Asia
+Togo=XOF=TG=Africa
+Tokelau=NZD=TK=Pacific
+Tonga=TOP=TO=Pacific
+Trinidad and Tobago=TTD=TT=Caraibes
+Tunisia=TND=TN=Africa
+Turkey=TRY=TR=East Europe
+Turks and Caicos Islands=USD=TC=Caraibes
+Tuvalu=AUD=TV=Pacific
+Uganda=UGS=UG=Africa
+Ukraine=UAH=UA=East Europe
+United Arab Emirates=AED=AE=Middle east
+United States=USD=US=North America
+Uruguay=UYP=UY=South and central America
+US Minor outlying Isl.=USD=UM=North America
+US Virgin Islands=USD=VI=Caraibes
+Vanuatu=VUV=VU=Pacific
+Vatican City State=EUR=VA=Occidental Europe
+Venezuela=VEB=VE=South and central America
+Vietnam=VND=VN=Asia
+Western Sahara=ESP=EH=Africa
+Western Sahara=MAD=EH=Africa
+Western Sahara=MRO=EH=Africa
+Western Samoa=WST=WS=Pacific
+Yugoslavia=YUN=YU=East Europe
+Zambia=ZMK=ZM=Africa
+Zimbabwe=ZWD=ZW=Africa

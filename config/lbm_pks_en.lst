@@ -1,0 +1,9 @@
+#format file [namalaporan]=[filetujuan]=[alt onmouseover]
+COVER=lbm_sampul=COVER
+CHEMICAL AND FUEL USAGE=lbm_pks_kimiadanbbm=CHEMICAL AND FUEL USAGE
+PRODUCTION COST RECAP=lbm_pks_rekap_byproduksi=PRODUCTION COST RECAP
+ADMINISTRATION COST=lbm_pks_byadministrasi=ADMINISTRATION COST
+PROCESSING COST=lbm_pks_bypengolahan=PROCESSING COST
+MAINTENANCE COST=lbm_pks_byperawatan=MAINTENANCE COST
+COST OF SALES=lbm_pksbypenjualan=COST OF SALES
+COST OF PRODUCTION/STATION=lbm_pks_byproduksiperstation=COST OF PRODUCTION/STATION

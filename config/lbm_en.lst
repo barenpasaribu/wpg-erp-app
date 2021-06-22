@@ -1,0 +1,51 @@
+#format file [namalaporan]=[filetujuan]=[alt onmouseover]
+00_COVER=lbm_sampul=COVER
+01_AREAL STATEMENT=lbm_aresta=AREAL STATEMENT
+
+
+041 EMPLOYEES AND HOUSING=lbm_karyawan_perumahan=EMPLOYEES AND HOUSING
+042 WORKERS AND LIABILITY=lbm_pekerja_tanggungan=WORKERS AND LIABILITY
+043 EMPLOYEES MUTATIONS=lbm_mutasi_karyawan=EMPLOYEES MUTATIONS
+
+045 EFFECTIVE WORKING DAYS=lbm_hari_kerja_efektif=EFFECTIVE WORKING DAYS
+046 HOUSING=lbm_perumahan=HOUSING
+047 INFRASTRUCTURE INVENTORY=lbm_prasarana=INFRASTRUCTURE INVENTORY
+051 PRODUCTION (TON)=lbm_produksi_ton=PRODUCTION
+052 PRODUCTION (TON-HA)=lbm_produksi_tonha=PRODUCTION
+053 RAINFALL=lbm_curah_hujan=RAINFALL
+06_HARVESTING OUTPUT=lbm_output_potong_buah=HARVESTING OUTPUT
+07_HARVESTING CYCLE=lbm_pusingan_potong_buah=HARVESTING CYCLE
+071HARVESTING ROTATION=lbm_rotasi_potong_buah=HARVESTING ROTATION
+
+
+10_MATURE UPKEEP (HA-HK)=lbm_pemeliharan_tm=MATURE UPKEEP (HA-HK)
+11_IMMATURE UPKEEP (HA-HK)=lbm_pemeliharan_tbm=IMMATURE UPKEEP (HA-HK)
+12_UPKEEP (LTR-KG-HA)=lbm_pemeliharan_tbm_ltrkgha=UPKEEP (LTR-KG-HA)
+131 FERTILIZING=lbm_pemupukan=FERTILIZING
+132 FERTILIZER STOCK=lbm_pupuk_agro_kacangan=FERTILIZER STOCK
+133 FERTILIZER DISTRIBUTION=lbm_distibusi_pupuk=FERTILIZER DISTRIBUTION
+14_LAND CLEARING=lbm_pembukaan_lahan=LAND CLEARING
+16_NURSERY AREAL STATEMEN=lbm_areal_bibitan=NURSERY AREAL STATEMEN
+
+17_BREED SHIPPING=lbm_pengiriman_bibit=BREED SHIPPING
+18_MATURE UPKEEP COST (RP-HA)=lbm_biayapemeliharaan_tm=MATURE UPKEEP COST (RP-HA)
+19_IMMATURE UPKEEP COST (RP-HA)=lbm_biayapemeliharaan_tbm=IMMATURE UPKEEP COST (RP-HA)
+20_PRODUCTION COST (RP-KG)=lbm_biaya_produksi_kebun=PRODUCTION COST (RP-KG)
+21_LC COST (RP-HA)=lbm_biaya_pembukaan_lahan=LC COST (RP-HA)
+22_NURSERY COST=lbm_biaya_bibitan=NURSERY COST
+23_CAPITAL COSTS OF NON PLANT (RP-UNIT)=lbm_bykapitalnontanaman=CAPITAL COSTS OF NON PLANT (RP-UNIT)
+24_OVER HEAD COST=lbm_biaya_overhead=OVER HEAD COST
+251 VEHICLE RUNN and  WORK SHOP=lbm_traksi_dan_ws=VEHICLE RUNN and  WORK SHOP
+252 VEHICLE=lbm_kendaraan=VEHICLE
+253 TRANSIT VEHICLES=lbm_transit_kendaraan=TRANSIT VEHICLES
+254 TRANSIT HEAVY EQUIPMENT=lbm_transit_ab=TRANSIT HEAVY EQUIPMENT
+255 TRANSIT SUPPORTING MACHINE=lbm_transit_penunjang=TRANSIT SUPPORTING MACHINE
+
+
+MATURE UPKEEP COST=lbm_analisa_biayapemeliharaan=MATURE UPKEEP COST- Assistant Monthly Report
+NEW PLANTING COST=lbm_analisa_biayapemeliharaan_tb=NEW PLANTING COST- Assistant Monthly Report
+PRODUCTION per BLOCK=lbm_produksi_perblok=PRODUCTION per BLOCK- Assistant Monthly Report
+MOTNLY PRODUCTION=lbm_produksi_bulanan=MOTNLY PRODUCTION- Assistant Monthly Report
+FFB AVG WEIGHT=lbm_bjr=FFB AVG WEIGHT- Assistant Monthly Report
+DIVIDION FERTILIZING=lbm_pemupukan_afd=DIVIDION FERTILIZING- Assistant Monthly Report
+SPRAYING=lbm_semprot=SPRAYING- Assistant Monthly Report

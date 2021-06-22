@@ -1,0 +1,40 @@
+#format file [namalaporan]=[filetujuan]=[alt onmouseover]
+
+001 PKS-Penerimaan TBS		=bi_penerimaanTBS_form		=Penerimaan TBS
+002 PKS-Penerimaan Buah Vs OER =bi_distribusi_penerimaan_form =Distribusi penerimaan TBS versus OER
+003 PKS-Produksi PKS		=bi_produksiPKS_form		=Produksi PKS
+004 PKS-Kapasitas Olah		=bi_kapasitasPKS_form		=Kapasitas Pengolahan PKS
+005 PKS-Produksi Vs Budget	=bi_produksiVsBudhetPKS_form		=Produksi PKS Versus Budget
+006 PKS-Produksi Vs Budget Tahunan	=bi_produksiVsBudhetPKSAnnually_form		=Produksi PKS Versus Budget Tahunan
+007 PKS-Biaya Produksi		=bi_biayaProduksiPKS_form		=Biaya Produksi PKS
+008 PKS-Biaya Produksi Vs Budget		=bi_biayaProduksiPKSVsBudghet_form		=Biaya Produksi PKS Versus Budget
+009 PKS-Pengolahan Harian		=bi_pengolahanPKSHarian_form		=Pengolahan Harian PKS
+010 PKS-Stok CPO/PK		=bi_stokCPOPK_form		=Stok CPO/PK
+
+101 SDM-Biaya Lembur		=bi_sdmBiayaLembur_form		=Biaya Lembur
+102 SDM-Turn Over Staff		=bi_sdmTurnOverStaff_form		=Turn Over Karyawan (Staff)
+103 SDM-Biaya Pengobatan	=bi_sdmBiayaPengobatan_form		=Biaya Pengobatan
+104 SDM-Biaya Pengobatan By Diagnosa	=bi_sdmBiayaPengobatanDiagnosa_form		=Biaya Pengobatan Berdasarkan Diagnosa
+105 SDM-Biaya Pengobatan By Perawatan	=bi_sdmBiayaPengobatanPerawatan_form		=Biaya Pengobatan Berdasarkan Jenis Perawatan
+106 SDM-Biaya Pengobatan By Rumah Sakit	=bi_sdmBiayaPengobatanperRs_form		=Biaya Pengobatan Berdasarkan Rumah Sakit
+107 SDM-Frekuensi pengobatan	=bi_sdmFrekuensiPengobatan_form		=Frekuensi Pengobatan
+108 SDM-Gaji	=bi_sdmGaji_form		=Biaya Gaji
+
+201 AGR-Produksi TBS Vs Budget	=bi_agrProduksi		=Produksi TBS Vs Budget
+202 AGR-Biaya Panen Vs Budget	=bi_agrBiayaPanen		=Biaya Panen Vs Budget
+203 AGR-Biaya TM Vs Budget		=bi_agrBiayaTM		=Biaya TM vs Budget Kebun
+204 AGR-Biaya TBM Vs Budget		=bi_agrBiayaTBM		=Biaya TBM vs Budget Kebun
+205 AGR-Cost To Maturity		=bi_agrCTM		=Cost To Maturity
+206 AGR-Stok Bibit				=bi_agrStokBibit		=Stok Bibit
+207 AGR-Stok Bibitv2				=bi_agrStokBibitv2		=Stok Bibitv2
+208 AGR-PEMUPUKAN TM				=bi_agrPemupukan		=PEMUPUKAN TM
+
+301 TRK-Biaya Per Kendaraan		=bi_trkBiayaPerKendaraan_form		=Biaya Per Kendaraan
+302 TRK-Penggunaan BBM		=bi_trkpenggunaanBBM_form		=Penggunaan BBM
+
+401 PUR-Total Realiasasi per Region		=bi_purRealisasiKapitalDanNon		=Total Realiasasi per Region
+402 PUR-Total Realiasasi per Kelompok           =bi_purRealisasiKlmpk		=Total Realiasasi per Kelompok Barang
+403 PUR-Under Construction		=bi_purUnderConstruction		=Under Construction
+404 PUR-Under Construction		=bi_purUnderConstruction		=Under Construction
+405 PUR-Under Construction		=bi_purUnderConstruction		=Under Construction
+406 PUR-Under Construction		=bi_purUnderConstruction		=Under Construction
