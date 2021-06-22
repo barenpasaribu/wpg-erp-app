@@ -1,0 +1,27 @@
+<?php
+require_once 'master_validation.php';
+include 'lib/eagrolib.php';
+include_once 'lib/zLib.php';
+echo open_body();
+include 'master_mainMenu.php';
+echo "\r\n<script language=javascript1.2 src='js/pabrik_5ketetapansuhu.js'></script>\r\n\r\n";
+OPEN_BOX('', $_SESSION['lang']['suhu'].' '.$_SESSION['lang']['tangki']);
+$optPabrik = '<option value="">'.$_SESSION['lang']['pilihdata'].'</option>>';
+$sOpt = selectQuery($dbname, 'organisasi', 'kodeorganisasi,namaorganisasi', "tipe='PABRIK' AND kodeorganisasi LIKE'".$_SESSION['empl']['lokasitugas']."'");
+$qOpt = mysql_query($sOpt);
+while ($rOpt = mysql_fetch_assoc($qOpt)) {
+    $optPabrik .= '<option value='.$rOpt['kodeorganisasi'].'>'.$rOpt['namaorganisasi'].'</option>';
+}
+echo "<fieldset style='width:500px'>";
+if ('ID' === $_SESSION['language']) {
+    echo '<legend>'.$_SESSION['lang']['form'].'</legend>';
+} else {
+    echo '<legend>Tank Temperature</legend>';
+}
+
+echo "<table border=0 cellpadding=1 cellspacing=1>\r\n            <tr>\r\n                    <td>".$_SESSION['lang']['kodeorg']."</td>\r\n                    <td>:</td>\r\n                    <td><select id=kodeorg name=kodeorg style=width:150px onchange=getTangki()>".$optPabrik."</select></td>\r\n            </tr>\r\n            <tr>\r\n                    <td>".$_SESSION['lang']['kodetangki']."</td>\r\n                    <td>:</td>\r\n                    <td><select id=kodetangki name=kodetangki style=width:150px></select></td>\r\n            </tr>\r\n            <tr>\r\n                    <td>".$_SESSION['lang']['suhu']."</td> \r\n                    <td>:</td>\r\n                    <td><input type=text id=suhu value='0' onkeypress=\"return angka_doang(event);\" value='' class=myinputtextnumber style=\"width:150px;\"></td>\r\n            </tr>\r\n\r\n            <tr>\r\n                    <td>".$_SESSION['lang']['kepadatan']."</td> \r\n                    <td>:</td>\r\n                    <td><input type=text id=kepadatan value='0' onkeypress=\"return angka_doang(event);\" value='' class=myinputtextnumber style=\"width:150px;\"></td>\r\n            </tr>\r\n\r\n            <tr>\r\n                    <td>".$_SESSION['lang']['ketetapan']."</td> \r\n                    <td>:</td>\r\n                    <td><input type=text id=ketetapan value='0' onkeypress=\"return angka_doang(event);\"  class=myinputtextnumber style=\"width:150px;\"></td>\r\n            </tr>\r\n\r\n            <tr><td colspan=2></td>\r\n                    <td colspan=3>\r\n                            <button class=mybutton onclick=simpan()>Simpan</button>\r\n                    </td>\r\n            </tr>\r\n\r\n    </table></fieldset>\r\n                    <input type=hidden id=method value='insert'>";
+echo "<fieldset style='width:500px'>\r\n\t\t<legend>".$_SESSION['lang']['list']."</legend>\r\n\t\t<div id=container> \r\n\t\t\t<script>loadData()</script>\r\n\t\t</div>\r\n\t</fieldset>";
+CLOSE_BOX();
+echo close_body();
+
+?>

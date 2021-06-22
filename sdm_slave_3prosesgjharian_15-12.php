@@ -1,0 +1,516 @@
+<?php
+
+
+
+require_once 'master_validation.php';
+include_once 'lib/eagrolib.php';
+include_once 'lib/zLib.php';
+include_once 'lib/rTable.php';
+$proses = $_GET['proses'];
+$param = $_POST;
+$namakar = [];
+$sCekPeriode = 'select distinct * from '.$dbname.".sdm_5periodegaji where periode='".$param['periodegaji']."' \r\n              and kodeorg='".$_SESSION['empl']['lokasitugas']."' and sudahproses=1 and jenisgaji='H'";
+$qCekPeriode = mysql_query($sCekPeriode);
+if (0 < mysql_num_rows($qCekPeriode)) {
+    $aktif2 = false;
+} else {
+    $aktif2 = true;
+}
+
+if (!$aktif2) {
+    exit(' Payroll period has been closed');
+}
+
+$str = 'select * from '.$dbname.".setup_periodeakuntansi where periode='".$param['periodegaji']."' and \r\n             kodeorg='".$_SESSION['empl']['lokasitugas']."' and tutupbuku=1";
+$res = mysql_query($str);
+if (0 < mysql_num_rows($res)) {
+    $aktif = false;
+} else {
+    $aktif = true;
+}
+
+if (!$aktif) {
+    exit('Accounting perid has been closed');
+}
+
+$qPeriod = selectQuery($dbname, 'sdm_5periodegaji', 'tanggalmulai,tanggalsampai', "periode='".$param['periodegaji']."' and kodeorg='".$_SESSION['empl']['lokasitugas']."' and jenisgaji='H'");
+$resPeriod = fetchData($qPeriod);
+$tanggal1 = $resPeriod[0]['tanggalmulai'];
+$tanggal2 = $resPeriod[0]['tanggalsampai'];
+$str = 'delete from '.$dbname.".kebun_aktifitas where notransaksi like '%//%'";
+mysql_query($str);
+$query1 = selectQuery($dbname, 'datakaryawan', 'karyawanid,tipekaryawan,namakaryawan,jms,statuspajak,npwp', "tipekaryawan in(2,3,4,6) and \r\n     lokasitugas='".$_SESSION['empl']['lokasitugas']."' and \r\n     (tanggalkeluar>='".$tanggal1."' or tanggalkeluar is NULL) and alokasi=0\r\n      and ( tanggalmasuk<='".$tanggal2."' or tanggalmasuk='0000-00-00' or tanggalmasuk is null)");
+$absRes = fetchData($query1);
+if (empty($absRes)) {
+    echo 'Error : There is no presence(kehadiran) on this period';
+    exit();
+}
+
+$id = [];
+foreach ($absRes as $row => $kar) {
+    $id[$kar['karyawanid']][] = $kar['karyawanid'];
+    $namakar[$kar['karyawanid']] = $kar['namakaryawan'];
+    $gajiperhari[$kar['karyawanid']] = 0;
+    $nojms[$kar['karyawanid']] = trim($kar['jms']);
+    $statuspajak[$kar['karyawanid']] = trim($kar['statuspajak']);
+    $npwp[$kar['karyawanid']] = trim($kar['npwp']);
+    if (2 == $kar['tipekaryawan']) {
+        $tipekaryawan[$kar['karyawanid']] = 'Kontrak';
+    } else {
+        if (3 == $kar['tipekaryawan']) {
+            $tipekaryawan[$kar['karyawanid']] = 'KHT';
+        } else {
+            if (4 == $kar['tipekaryawan']) {
+                $tipekaryawan[$kar['karyawanid']] = 'BHL';
+            } else {
+                if (6 == $kar['tipekaryawan']) {
+                    $tipekaryawan[$kar['karyawanid']] = 'Kontrak Karya';
+                } else {
+                    $tipekaryawan[$kar['karyawanid']] = 'Magang';
+                }
+            }
+        }
+    }
+}
+$strgjh = 'select a.karyawanid,sum(jumlah)/25 as gjperhari from '.$dbname.".sdm_5gajipokok a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where a.tahun=".substr($tanggal1, 0, 4)." and b.tipekaryawan in(2,3,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.idkomponen in(1,2,31)\r\n               group by a.karyawanid";
+$resgjh = fetchData($strgjh);
+foreach ($resgjh as $idx => $val) {
+    $gajiperhari[$val['karyawanid']] = $val['gjperhari'];
+}
+$t1 = $tanggal1.' 00:00:01';
+$t2 = $tanggal2.' 23:59:59';
+$endd = strtotime($t2);
+$startd = strtotime($t1);
+$jumlahh = round(abs($endd - $startd) / 60 / 60 / 24);
+$pengurang = date('t', $startd);
+$strgjh = 'select  count(*) as jlh,b.karyawanid from '.$dbname.".sdm_hktdkdibayar_vw a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where b.tipekaryawan in(2,3,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n               group by a.karyawanid";
+$tdkdibayar = [];
+$resgjh = fetchData($strgjh);
+foreach ($resgjh as $idx => $val) {
+    $tdkdibayar[$val['karyawanid']] = $gajiperhari[$val['karyawanid']] * $val['jlh'];
+    $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $val['karyawanid'], 'idkomponen' => 20, 'jumlah' => $tdkdibayar[$val['karyawanid']], 'pengali' => 1];
+}
+if ('list' == $proses) {
+    $strux = 'select a.karyawanid,tanggal from '.$dbname.".kebun_kehadiran_vw a left join \r\n                     ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n                      where b.tipekaryawan in(1,2,3,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n                      and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n                      and a.unit like '".$_SESSION['empl']['lokasitugas']."%' \r\n                      and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n                       order by tanggal";
+    $resux = mysql_query($strux);
+    while ($baux = mysql_fetch_object($resux)) {
+        $periksa[$baux->karyawanid][$baux->tanggal] = $baux->tanggal;
+    }
+    $strux = 'select a.karyawanid,tanggal from '.$dbname.".kebun_prestasi_vw a left join \r\n                     ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n                      where b.tipekaryawan in(1,2,3,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n                      and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n                      and a.unit like '".$_SESSION['empl']['lokasitugas']."%' \r\n                      and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n                      order by tanggal";
+    $resux = mysql_query($strux);
+    while ($baux = mysql_fetch_object($resux)) {
+        $periksa[$baux->karyawanid][$baux->tanggal] = $baux->tanggal;
+    }
+    $strux = "select a.idkaryawan as karyawanid,tanggal\r\n                  from ".$dbname.".vhc_runhk_vw a left join \r\n                 ".$dbname.".datakaryawan b on a.idkaryawan=b.karyawanid\r\n                  where b.tipekaryawan in(1,2,3,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n                  and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n                  and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n                  order by tanggal";
+    $resux = mysql_query($strux);
+    while ($baux = mysql_fetch_object($resux)) {
+        $periksa[$baux->karyawanid][$baux->tanggal] = $baux->tanggal;
+    }
+    $strux = "select a.karyawanid,tanggal\r\n                  from ".$dbname.".sdm_absensidt a left join \r\n                 ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n                  where b.tipekaryawan in(1,2,3,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n                  and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n                  and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n                  order by tanggal";
+    $resux = mysql_query($strux);
+    while ($baux = mysql_fetch_object($resux)) {
+        $periksa[$baux->karyawanid][$baux->tanggal] = $baux->tanggal;
+    }
+    $strux = "select tanggal,nikmandor,nikmandor1,nikasisten,keranimuat\r\n                  from ".$dbname.".kebun_aktifitas where kodeorg='".$_SESSION['empl']['lokasitugas']."'\r\n                  and  tanggal>='".$tanggal1."' and tanggal<='".$tanggal2."'     \r\n                  order by tanggal";
+    $resux = mysql_query($strux);
+    while ($baux = mysql_fetch_object($resux)) {
+        $periksa[$baux->nikmandor][$baux->tanggal] = $baux->tanggal;
+        $periksa[$baux->nikmandor1][$baux->tanggal] = $baux->tanggal;
+        $periksa[$baux->nikasisten][$baux->tanggal] = $baux->tanggal;
+        $periksa[$baux->keranimuat][$baux->tanggal] = $baux->tanggal;
+    }
+    $queryq = selectQuery($dbname, 'datakaryawan', 'karyawanid,namakaryawan,subbagian', "tipekaryawan in(1,2,3,6) and \r\n           lokasitugas='".$_SESSION['empl']['lokasitugas']."' and \r\n           (tanggalkeluar>='".$tanggal2."' or tanggalkeluar is NULL) and alokasi=0  \r\n           and ( tanggalmasuk<='".$tanggal1."' or tanggalmasuk='0000-00-00' or tanggalmasuk is null)");
+    $absResq = fetchData($queryq);
+    $kotak = '';
+    $nx = 0;
+    foreach ($absResq as $rowq => $karq) {
+        if (count($periksa[$karq['karyawanid']]) < $jumlahh) {
+            ++$nx;
+            $kotak .= $nx.'.'.$karq['namakaryawan'].'-'.$karq['subbagian']."\n";
+        }
+    }
+    if ('' != $kotak) {
+        exit("Error: There are absences that have not been recorded in the name of the following employees:\n".$kotak);
+    }
+}
+
+$str1 = 'select a.*,b.namakaryawan from '.$dbname.".sdm_5gajipokok a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where a.tahun=".substr($tanggal1, 0, 4)." and b.tipekaryawan in(2,3,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0";
+$res1 = fetchData($str1);
+$query6 = selectQuery($dbname, 'sdm_ho_hr_jms_porsi', 'value', "id='karyawan'");
+$jmsRes = fetchData($query6);
+$persenJms = $jmsRes[0]['value'] / 100;
+$tjms = [];
+foreach ($res1 as $idx => $val) {
+    if ($id[$val['karyawanid']][0] == $val['karyawanid'] && ('KHT' == $tipekaryawan[$val['karyawanid']] || 'Kontrak' == $tipekaryawan[$val['karyawanid']] || 'Kontrak Karya' == $tipekaryawan[$val['karyawanid']])) {
+        if (1 == $val['idkomponen'] && $pengurang < $jumlahh) {
+            $selisih = $jumlahh - $pengurang;
+            $pengurangkelebihanminggu = floor($selisih / 7);
+            $bersih = $selisih - $pengurangkelebihanminggu;
+            $val['jumlah'] += $gajiperhari[$val['karyawanid']] * $bersih;
+        }
+
+        if (1 == $val['idkomponen'] && $jumlahh < $pengurang) {
+            $selisih = $pengurang - $jumlahh;
+            $pengurangkelebihanminggu = floor($selisih / 7);
+            $bersih = $selisih - $pengurangkelebihanminggu;
+            $val['jumlah'] -= $gajiperhari[$val['karyawanid']] * $bersih;
+        }
+
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $val['karyawanid'], 'idkomponen' => $val['idkomponen'], 'jumlah' => $val['jumlah'], 'pengali' => 1];
+        if ((1 == $val['idkomponen'] || 2 == $val['idkomponen'] || 15 == $val['idkomponen']) && '' != $nojms[$val['karyawanid']]) {
+            $tjms[$val['karyawanid']] += $val['jumlah'];
+        }
+    }
+}
+foreach ($tjms as $key => $nilai) {
+    if ('KHT' == $tipekaryawan[$key] || 'Kontrak' == $tipekaryawan[$key]) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $key, 'idkomponen' => 3, 'jumlah' => $nilai * $persenJms, 'pengali' => 1];
+    }
+}
+$where2 = " a.kodeorg like '".$_SESSION['empl']['lokasitugas']."%' and (tanggal>='".$tanggal1."' and tanggal<='".$tanggal2."')";
+$query2 = 'select a.karyawanid,sum(a.uangkelebihanjam) as lembur from '.$dbname.".sdm_lemburdt a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0                 \r\n               and ".$where2.' group by a.karyawanid';
+$lbrRes = fetchData($query2);
+foreach ($lbrRes as $idx => $row) {
+    if (isset($id[$row['karyawanid']])) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $row['karyawanid'], 'idkomponen' => 33, 'jumlah' => $row['lembur'], 'pengali' => 1];
+    }
+}
+$where3 = " kodeorg='".$_SESSION['empl']['lokasitugas']."' and periodegaji='".$param['periodegaji']."'";
+$query3 = 'select a.nik as karyawanid,sum(jumlahpotongan) as potongan from '.$dbname.".sdm_potongandt a left join \r\n              ".$dbname.".datakaryawan b on a.nik=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0              \r\n               and ".$where3.' group by a.nik';
+$potRes = fetchData($query3);
+foreach ($potRes as $idx => $row) {
+    if (isset($id[$row['karyawanid']])) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $row['karyawanid'], 'idkomponen' => 18, 'jumlah' => $row['potongan'], 'pengali' => 1];
+    }
+}
+$where4 = " start<='".$param['periodegaji']."' and end>='".$param['periodegaji']."'";
+$query4 = 'select a.karyawanid,a.bulanan,a.jenis from '.$dbname.".sdm_angsuran a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.active=1                 \r\n               and ".$where4;
+$angRes = fetchData($query4);
+foreach ($angRes as $idx => $row) {
+    if ($id[$row['karyawanid']][0] == $row['karyawanid']) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $row['karyawanid'], 'idkomponen' => $row['jenis'], 'jumlah' => $row['bulanan'], 'pengali' => 1];
+    }
+}
+$stru1 = 'select distinct(tanggal) from '.$dbname.".kebun_kehadiran_vw a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.unit like '".$_SESSION['empl']['lokasitugas']."%' and a.jurnal=0\r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n               order by tanggal";
+$resu1 = mysql_query($stru1);
+$stru2 = 'select distinct(tanggal) from '.$dbname.".kebun_prestasi_vw a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.unit like '".$_SESSION['empl']['lokasitugas']."%' and a.jurnal=0\r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n               order by tanggal";
+$resu2 = mysql_query($stru2);
+$stru3 = "select distinct(tanggal)\r\n           from ".$dbname.".vhc_runhk_vw a left join \r\n          ".$dbname.".datakaryawan b on a.idkaryawan=b.karyawanid\r\n           where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n           and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n           and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n           and posting=0 order by tanggal";
+$resu3 = mysql_query($stru3);
+if (0 < mysql_num_rows($resu1) || 0 < mysql_num_rows($resu2) || 0 < mysql_num_rows($resu3)) {
+    echo 'Masih ada data yang belum di posting/There still unconfirmed transaction:';
+    echo "<table class=sortable border=0 cellspacing=1>\r\n            <thead><tr class=rowheader>\r\n            <td>".$_SESSION['lang']['jenis']."</td>\r\n            <td>".$_SESSION['lang']['tanggal']."</td>\r\n            </tr></thead><tbody>";
+    while ($bar = mysql_fetch_object($resu1)) {
+        echo '<tr class=rowcontent><td>Perawatan Kebun</td><td>'.tanggalnormal($bar->tanggal).'</td></tr>';
+    }
+    while ($bar = mysql_fetch_object($resu2)) {
+        echo '<tr class=rowcontent><td>Panen</td><td>'.tanggalnormal($bar->tanggal).'</td></tr>';
+    }
+    while ($bar = mysql_fetch_object($resu3)) {
+        echo '<tr class=rowcontent><td>Traksi Pekerjaan</td><td>'.tanggalnormal($bar->tanggal).'</td></tr>';
+    }
+    echo '</tbody><tfoot></tfoot></table>';
+    exit();
+}
+
+$premi = [];
+$penalty = [];
+$gapokbhl = [];
+$penaltykehadiran = [];
+$query5 = 'select sum(a.umr) as gaji,a.karyawanid,sum(a.insentif) as premi from '.$dbname.".kebun_kehadiran_vw a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.unit like '".$_SESSION['empl']['lokasitugas']."%'\r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n                group by a.karyawanid";
+$premRes = fetchData($query5);
+foreach ($premRes as $idx => $val) {
+    if (0 < $val['premi']) {
+        $premi[$val['karyawanid']] = $val['premi'];
+    }
+
+    if ('BHL' == $tipekaryawan[$val['karyawanid']]) {
+        if (empty($gapokbhl[$val['karyawanid']])) {
+            $gapokbhl[$val['karyawanid']] = $val['gaji'];
+        } else {
+            $gapokbhl[$val['karyawanid']] += $val['gaji'];
+        }
+    }
+}
+$query6 = "select sum(a.upahkerja) as upahkerja,a.karyawanid,sum(a.upahpremi) as premi,sum(a.rupiahpenalty) as penalty \r\n               from ".$dbname.".kebun_prestasi_vw a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.unit like '".$_SESSION['empl']['lokasitugas']."%' \r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n                group by a.karyawanid";
+$premRes1 = fetchData($query6);
+foreach ($premRes1 as $idx => $val) {
+    if (0 < $val['premi']) {
+        if (isset($premi[$val['karyawanid']])) {
+            $premi[$val['karyawanid']] += $val['premi'];
+        } else {
+            $premi[$val['karyawanid']] = $val['premi'];
+        }
+    }
+
+    if (0 < $val['penalty']) {
+        $penalty[$val['karyawanid']] = $val['penalty'];
+    }
+
+    if ('BHL' == $tipekaryawan[$val['karyawanid']]) {
+        if (empty($gapokbhl[$val['karyawanid']])) {
+            $gapokbhl[$val['karyawanid']] = $val['upahkerja'];
+        } else {
+            $gapokbhl[$val['karyawanid']] += $val['upahkerja'];
+        }
+    }
+}
+$query7 = "select sum(a.upah) as upah,a.idkaryawan as karyawanid,sum(a.premi) as premi,sum(a.penalty) as penalty \r\n               from ".$dbname.".vhc_runhk_vw a left join \r\n              ".$dbname.".datakaryawan b on a.idkaryawan=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and substr(a.notransaksi,1,4)='".$_SESSION['empl']['lokasitugas']."' \r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n                group by a.idkaryawan";
+$premRes2 = fetchData($query7);
+foreach ($premRes2 as $idx => $val) {
+    if (0 < $val['premi']) {
+        if (isset($premi[$val['karyawanid']])) {
+            $premi[$val['karyawanid']] += $val['premi'];
+        } else {
+            $premi[$val['karyawanid']] = $val['premi'];
+        }
+    }
+
+    if (0 < $val['penalty']) {
+        if (isset($penalty[$val['karyawanid']])) {
+            $penalty[$val['karyawanid']] += $val['penalty'];
+        } else {
+            $penalty[$val['karyawanid']] = $val['penalty'];
+        }
+    }
+}
+$query8 = "select sum(a.premiinput) as premi,a.karyawanid\r\n               from ".$dbname.".kebun_premikemandoran a left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n               where b.tipekaryawan in(2,3,4,6) and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.kodeorg='".$_SESSION['empl']['lokasitugas']."'  \r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."'     \r\n                 and a.posting=1                   \r\n               group by a.karyawanid";
+$premRes2 = fetchData($query8);
+foreach ($premRes2 as $idx => $val) {
+    if (0 < $val['premi']) {
+        if (isset($premi[$val['karyawanid']])) {
+            $premi[$val['karyawanid']] += $val['premi'];
+        } else {
+            $premi[$val['karyawanid']] = $val['premi'];
+        }
+    }
+}
+$strup = 'select a.karyawanid,(b.jumlah/25) as upahabsen FROM '.$dbname.".sdm_absensidt_vw a \r\n                left join ".$dbname.".sdm_5gajipokok b on a.karyawanid=b.karyawanid and nilaihk=1\r\n                and b.idkomponen=1 \r\n               where b.tahun=".substr($tanggal1, 0, 4)." and substr(a.kodeorg,1,4)='".$_SESSION['empl']['lokasitugas']."' \r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."' \r\n               and a.tipekaryawan=4";
+$resup = fetchData($strup);
+foreach ($resup as $idx => $val) {
+    if (empty($gapokbhl[$val['karyawanid']])) {
+        $gapokbhl[$val['karyawanid']] = $val['upahabsen'];
+    } else {
+        $gapokbhl[$val['karyawanid']] += $val['upahabsen'];
+    }
+}
+foreach ($gapokbhl as $key => $val) {
+    if (0 < $val) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $key, 'idkomponen' => 1, 'jumlah' => $val, 'pengali' => 1];
+    }
+}
+$stkh = 'select a.karyawanid,sum(a.premi+a.insentif) as premi from '.$dbname.".sdm_absensidt a \r\n                left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n                          where b.tipekaryawan in(2,3,4,6)  and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.kodeorg like '".$_SESSION['empl']['lokasitugas']."%'   \r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."' group by a.karyawanid";
+$reskh = mysql_query($stkh);
+while ($barky = mysql_fetch_object($reskh)) {
+    if (isset($premi[$barky->karyawanid])) {
+        $premi[$barky->karyawanid] += $barky->premi;
+    } else {
+        $premi[$barky->karyawanid] = $barky->premi;
+    }
+}
+$stkh1 = 'select a.karyawanid,b.rupiahpremi  from '.$dbname.".kebun_premipanen a \r\n                left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n                          where b.tipekaryawan in(2,3,4,6)  and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.kodeorg like '".$_SESSION['empl']['lokasitugas']."%'   \r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."' group by a.karyawanid";
+$reskh1 = mysql_query($stkh1);
+while ($barky = mysql_fetch_object($reskh1)) {
+    if (isset($premi[$barky->karyawanid])) {
+        $premi[$barky->karyawanid] += $barky->rupiahpremi;
+    } else {
+        $premi[$barky->karyawanid] = $barky->rupiahpremi;
+    }
+}
+foreach ($premi as $idx => $row) {
+    if (0 < $row) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $idx, 'idkomponen' => 16, 'jumlah' => $row, 'pengali' => 1];
+    }
+}
+foreach ($penalty as $idx => $row) {
+    if (0 < $row) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $idx, 'idkomponen' => 34, 'jumlah' => $row, 'pengali' => 1];
+    }
+}
+$stkh = 'select a.karyawanid,sum(a.penaltykehadiran) as penaltykehadiran from '.$dbname.".sdm_absensidt a \r\n                left join \r\n              ".$dbname.".datakaryawan b on a.karyawanid=b.karyawanid\r\n                          where b.tipekaryawan in(2,3,4,6)  and b.lokasitugas='".$_SESSION['empl']['lokasitugas']."' \r\n               and  (b.tanggalkeluar>='".$tanggal1."' or b.tanggalkeluar is NULL) and b.alokasi=0\r\n               and a.kodeorg like '".$_SESSION['empl']['lokasitugas']."%'   \r\n               and a.tanggal>='".$tanggal1."' and a.tanggal<='".$tanggal2."' group by a.karyawanid";
+$reskh = mysql_query($stkh);
+while ($barkh = mysql_fetch_object($reskh)) {
+    if (0 < $barkh->penaltykehadiran) {
+        $penaltykehadiran[$barkh->karyawanid] = $barkh->penaltykehadiran;
+    }
+}
+foreach ($penaltykehadiran as $idx => $row) {
+    if (0 < $row) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $idx, 'idkomponen' => 41, 'jumlah' => $row, 'pengali' => 1];
+    }
+}
+$strx = "select id as komponen, case plus when 0 then -1 else plus end as pengali,name as nakomp \r\n              FROM ".$dbname.'.sdm_ho_component';
+$comRes = fetchData($strx);
+$comp = [];
+$nakomp = [];
+foreach ($comRes as $idx => $row) {
+    $comp[$row['komponen']] = $row['pengali'];
+    $nakomp[$row['komponen']] = $row['nakomp'];
+}
+$jabPersen = 0;
+$jabMax = 0;
+$str = 'select persen,max from '.$dbname.'.sdm_ho_pph21jabatan';
+$res = mysql_query($str);
+while ($bar = mysql_fetch_object($res)) {
+    $jabPersen = $bar->persen / 100;
+    $jabMax = $bar->max * 12;
+}
+$ptkp = [];
+$str = 'select id,value from '.$dbname.'.sdm_ho_pph21_ptkp';
+$res = mysql_query($str);
+while ($bar = mysql_fetch_object($res)) {
+    $ptkp[$bar->id] = $bar->value;
+}
+$pphtarif = [];
+$pphpercent = [];
+$str = 'select level,percent,upto from '.$dbname.'.sdm_ho_pph21_kontribusi order by level';
+$res = mysql_query($str);
+$urut = 0;
+while ($bar = mysql_fetch_object($res)) {
+    $pphtarif[$urut] = $bar->upto;
+    $pphpercent[$urut] = $bar->percent / 100;
+    ++$urut;
+}
+foreach ($id as $key => $val) {
+    $penghasilan[$val[0]] = 0;
+    foreach ($readyData as $dat => $bar) {
+        if ($val[0] == $bar['karyawanid'] && (1 == $comp[$bar['idkomponen']] || 20 == $bar['idkomponen'])) {
+            $penghasilan[$val[0]] += $bar['jumlah'];
+        }
+    }
+}
+foreach ($penghasilan as $xid => $jlh) {
+    $penghasilanSetahun[$xid] = $jlh * 12;
+    $biayaJab[$xid] = $penghasilanSetahun[$xid] * $jabPersen;
+    if ($jabMax < $biayaJab[$xid]) {
+        $biayaJab[$xid] = $jabMax;
+    }
+
+    $penghasilanKurangJab[$xid] = $penghasilanSetahun[$xid] - $biayaJab[$xid];
+    $pkp[$xid] = $penghasilanKurangJab[$xid] - $ptkp[str_replace('K', '', $kamusKar[$bar->karyawanid]['status'])];
+    $zz = 0;
+    $sisazz = 0;
+    if (0 < $pkp[$xid]) {
+        if ($pkp[$xid] < $pphtarif[0]) {
+            $zz += $pphpercent[0] * $pkp[$xid];
+            $sisazz = 0;
+        } else {
+            if ($pphtarif[0] <= $pkp[$xid]) {
+                $zz += $pphpercent[0] * $pphtarif[0];
+                $sisazz = $pkp[$xid] - $pphtarif[0];
+                if ($sisazz < $pphtarif[1] - $pphtarif[0]) {
+                    $zz += $pphpercent[1] * $sisazz;
+                    $sisazz = 0;
+                } else {
+                    if ($pphtarif[1] - $pphtarif[0] <= $sisazz) {
+                        $zz += $pphpercent[1] * ($pphtarif[1] - $pphtarif[0]);
+                        $sisazz = $pkp[$xid] - $pphtarif[1];
+                        if ($sisazz < $pphtarif[2] - $pphtarif[1]) {
+                            $zz += $pphpercent[2] * $sisazz;
+                            $sisazz = 0;
+                        } else {
+                            if ($pphtarif[2] - $pphtarif[1] <= $sisazz) {
+                                $zz += $pphpercent[2] * ($pphtarif[2] - $pphtarif[1]);
+                                $sisazz = $pkp[$xid] - $pphtarif[2];
+                                if (0 < $sisazz) {
+                                    $zz += $pphpercent[3] * $sisazz;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    $pphSetahun[$xid] = $zz / 12;
+    if ('' == $npwp[$xid]) {
+        $pphSetahun[$xid] = $pphSetahun[$xid] + ($pphSetahun[$xid] * 20) / 100;
+    }
+}
+foreach ($pphSetahun as $idx => $row) {
+    if (0 < $row) {
+        $readyData[] = ['kodeorg' => $_SESSION['empl']['lokasitugas'], 'periodegaji' => $param['periodegaji'], 'karyawanid' => $idx, 'idkomponen' => 24, 'jumlah' => $row, 'pengali' => 1];
+    }
+}
+$listbutton = '<button class=mybuttton name=postBtn id=postBtn onclick=post()>Proses</button>';
+$list0 = "<table class=sortable border=0 cellspacing=1>\r\n                     <thead>\r\n                     <tr class=rowheader>";
+$list0 .= '<td>'.$_SESSION['lang']['nomor'].'</td>';
+$list0 .= '<td>'.$_SESSION['lang']['periodegaji'].'</td>';
+$list0 .= '<td>'.$_SESSION['lang']['karyawanid'].'</td>';
+$list0 .= '<td>'.$_SESSION['lang']['tipe'].'</td>';
+$list0 .= '<td>'.$_SESSION['lang']['jumlah'].'</td></tr></thead><tbody>';
+$negatif = false;
+$list1 = '';
+$listx = 'Masih ada gaji dibawah 0:';
+$list2 = '';
+$list3 = '';
+$no = 0;
+$strsl = 'select karyawanid,jumlah from '.$dbname.".sdm_gaji where periodegaji='".$param['periodegaji']."'\r\n         and kodeorg like '".$_SESSION['empl']['lokasitugas']."%' and idkomponen=16";
+$slRes = fetchData($strsl);
+foreach ($slRes as $key => $val) {
+    $premPengawas[$val['karyawanid']] = $val['jumlah'];
+}
+foreach ($id as $key => $val) {
+    $sisa[$val[0]] = 0;
+    foreach ($readyData as $dat => $bar) {
+        if ($val[0] == $bar['karyawanid']) {
+            $sisa[$val[0]] += $bar['jumlah'] * $comp[$bar['idkomponen']];
+        } else {
+            continue;
+        }
+    }
+    $sisa[$val[0]] += $premPengawas[$val[0]];
+    if ($sisa[$val[0]] < 0) {
+        $list1 .= '<tr class=rowcontent>';
+        $list1 .= '<td>-</td>';
+        $list1 .= '<td>'.$param['periodegaji'].'</td>';
+        $list1 .= '<td>'.$namakar[$val[0]].'</td>';
+        $list1 .= '<td>'.$tipekaryawan[$val[0]].'</td>';
+        $list1 .= '<td>'.number_format($sisa[$val[0]], 0, ',', '.').'</td></tr>';
+        $negatif = true;
+    } else {
+        ++$no;
+        $list2 .= '<tr class=rowcontent>';
+        $list2 .= '<td>'.$no.'</td>';
+        $list2 .= '<td>'.$param['periodegaji'].'</td>';
+        $list2 .= '<td>'.$namakar[$val[0]].'</td>';
+        $list2 .= '<td>'.$tipekaryawan[$val[0]].'</td>';
+        $list2 .= '<td align=right>'.number_format($sisa[$val[0]], 0, ',', '.').'</td></tr>';
+    }
+}
+$list3 = '</tbody><table>';
+switch ($proses) {
+    case 'list':
+        if ($negatif) {
+            echo $listx.$list0.$list1.$list3;
+        } else {
+            echo $listbutton.$list0.$list2.$list3;
+        }
+
+        break;
+    case 'post':
+        $insError = '';
+        foreach ($readyData as $row) {
+            if (0 == $row['jumlah'] || '' == $row['jumlah']) {
+                continue;
+            }
+
+            $queryIns = insertQuery($dbname, 'sdm_gaji', $row);
+            if (!mysql_query($queryIns)) {
+                $queryUpd = updateQuery($dbname, 'sdm_gaji', $row, "kodeorg='".$row['kodeorg']."' and periodegaji='".$row['periodegaji']."' and karyawanid='".$row['karyawanid']."' and idkomponen=".$row['idkomponen']);
+                $tmpErr = mysql_error();
+                if (!mysql_query($queryUpd)) {
+                    echo 'DB Insert Error :'.$tmpErr."\n";
+                    print_r($row);
+                    echo 'DB Update Error :'.mysql_error()."\n";
+                }
+            }
+        }
+
+        break;
+    default:
+        break;
+}
+
+?>

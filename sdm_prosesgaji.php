@@ -1,0 +1,14 @@
+<?php
+
+
+
+require_once 'master_validation.php';
+include 'lib/eagrolib.php';
+echo open_body();
+include 'master_mainMenu.php';
+OPEN_BOX();
+echo "<FORM NAME = \"ProsesPenggajian\">\r\n<p align=\"left\"><b><font face=\"Arial\" color=\"#000080\" size=\"5\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>\r\n<font face=\"Arial\" color=\"#000080\" size=\"4\">\r\n<u>PROSES PENGGAJIAN</u></font></b></p>\r\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse: collapse\" bordercolor=\"#111111\" width=\"396\" id=\"AutoNumber1\" height=\"82\">\r\n  <tr>\r\n    <td width=\"135\" height=\"26\">\r\n    <p style=\"margin-top: 0; margin-bottom: 0\">\r\n    <font face=\"Arial\" style=\"font-size: 11pt\">Kode Org</font></td>\r\n    <td width=\"261\" height=\"26\">\r\n    <p style=\"margin-top: 0; margin-bottom: 0\">\r\n    <font face=\"Arial\" style=\"font-size: 11pt\"> \r\n    <input type=text size=\"9\" name=\"PeriodeGaji\"></font><span style=\"font-size: 11pt\"><font face=\"Arial\">\r\n    <input type=\"button\" value=\"Cek\" name=\"Cek1\"> </font></span></td>\r\n  </tr>\r\n  <tr>\r\n    <td width=\"135\" height=\"26\">\r\n    <p style=\"margin-top: 0; margin-bottom: 0\">\r\n    <font face=\"Arial\" style=\"font-size: 11pt\">Periode Gaji &nbsp; </font></td>\r\n    <td width=\"261\" height=\"26\">\r\n    <p style=\"margin-top: 0; margin-bottom: 0\">\r\n    <font face=\"Arial\" style=\"font-size: 11pt\"> \r\n    <input type=text size=\"9\" name=\"PeriodeGaji\"></font><span style=\"font-size: 11pt\"><font face=\"Arial\">\r\n    <input type=\"button\" value=\"Cek\" name=\"Cek1\"></font></span></td>\r\n  </tr>\r\n  <tr>\r\n    <td width=\"135\" height=\"25\">\r\n    <font face=\"Arial\" style=\"font-size: 11pt\">Tanggal</font></td>\r\n    <td width=\"261\" height=\"25\">\r\n    <font face=\"Times New Roman\" style=\"font-size: 11pt\"> \r\n    \$!Dari</font><font face=\"Arial\" style=\"font-size: 11pt\">&nbsp; <b>&nbsp;s/d&nbsp;\r\n    </b></font>\r\n    <font face=\"Times New Roman\" style=\"font-size: 11pt\"> \r\n    \$!Sampai </font></td>\r\n  </tr>\r\n  <tr>\r\n    <td width=\"135\" height=\"31\">\r\n    <font face=\"Arial\" style=\"font-size: 11pt\">Hari Kerja</font></td>\r\n    <td width=\"261\" height=\"31\">\r\n    \$!HariKerja</td>\r\n  </tr>\r\n  </table>\r\n<p style=\"margin-top: 0; margin-bottom: 0\">&nbsp;</p>\r\n<p style=\"margin-top: 0; margin-bottom: 0\">&nbsp;</p>\r\n<p style=\"margin-top: 0; margin-bottom: 0\"><span style=\"font-size: 11pt\">\r\n<font face=\"Arial\"><input type=\"button\" value=\"Proses\" name=\"ModifDtl\">&nbsp; </font>\r\n<font face=\"Arial\">\r\n<input type=\"button\" value=\"   Batal   \" name=\"DeleteDtl\"></font></span></p>\r\n<p style=\"margin-top: 0; margin-bottom: 0\">\r\n<font face=\"Arial\" style=\"font-size: 11pt\">&nbsp; \r\n&nbsp;</font></p>\r\n";
+CLOSE_BOX();
+echo close_body();
+
+?>

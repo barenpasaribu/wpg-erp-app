@@ -1,0 +1,172 @@
+<?php
+
+
+
+require_once 'master_validation.php';
+require_once 'config/connection.php';
+require_once 'lib/eagrolib.php';
+require_once 'lib/devLibrary.php';
+$pt = $_POST['pt'];
+$unit = $_POST['unit'];
+$tgl1 = $_POST['tgl1'];
+$tgl2 = $_POST['tgl2'];
+$tanggal1 = explode('-', $tgl1);
+$tanggal2 = explode('-', $tgl2);
+$date1 = $tanggal1[2].'-'.$tanggal1[1].'-'.$tanggal1[0];
+$tanggalterakhir = date(t, strtotime($date1));
+$tanggal = [];
+if ($tanggal1[1] < $tanggal2[1]) {
+    for ($i = $tanggal1[0]; $i <= $tanggalterakhir; ++$i) {
+        if (1 === strlen($i)) {
+            $ii = '0'.$i;
+        } else {
+            $ii = $i;
+        }
+
+        $tanggal[$tanggal1[2].'-'.$tanggal1[1].'-'.$ii] = $tanggal1[2].'-'.$tanggal1[1].'-'.$ii;
+    }
+    for ($i = 1; $i <= $tanggal2[0]; ++$i) {
+        if (1 === strlen($i)) {
+            $ii = '0'.$i;
+        } else {
+            $ii = $i;
+        }
+
+        $tanggal[$tanggal2[2].'-'.$tanggal2[1].'-'.$ii] = $tanggal2[2].'-'.$tanggal2[1].'-'.$ii;
+    }
+} else {
+    for ($i = $tanggal1[0]; $i <= $tanggal2[0]; ++$i) {
+        if (1 === strlen($i)) {
+            $ii = '0'.$i;
+        } else {
+            $ii = $i;
+        }
+
+        $tanggal[$tanggal1[2].'-'.$tanggal1[1].'-'.$ii] = $tanggal1[2].'-'.$tanggal1[1].'-'.$ii;
+    }
+}
+
+if ('' === $unit) {
+    //sum(a.hasilkerja)
+    $str = "select a.tanggal,a.tahuntanam,a.unit,a.kodeorg,sum(a.hasilkerja) as jjg,sum(a.hasilkerjakg) as berat,sum(a.upahkerja) as upah,\r\n        sum(a.upahpremi) as premi,sum(a.rupiahpenalty) as penalty,count(a.karyawanid) as jumlahhk  from ".$dbname.".kebun_prestasi_vw a\r\n        left join ".$dbname.".organisasi c\r\n        on substr(a.kodeorg,1,4)=c.kodeorganisasi\r\n        where c.induk = '".$pt."'  and a.tanggal between '".tanggalsystem($tgl1)."' and '".tanggalsystem($tgl2)."' group by a.tanggal,a.kodeorg";
+} else {
+    $str = "select a.tanggal,a.tahuntanam,a.unit,a.kodeorg,sum(a.hasilkerja) as jjg,sum(a.hasilkerjakg) as berat,sum(a.upahkerja) as upah,\r\n        sum(a.upahpremi) as premi,sum(a.rupiahpenalty) as penalty,count(a.karyawanid) as jumlahhk  from ".$dbname.".kebun_prestasi_vw a\r\n        where unit = '".$unit."'  and a.tanggal between '".tanggalsystem($tgl1)."' and '".tanggalsystem($tgl2)."' group by a.tanggal, a.kodeorg";
+}
+
+//echoMessage(' sql ',$str,true);
+
+$dzArr = [];
+$kmrn = strtotime('-1 day', strtotime($date1));
+$kmrn = date('Y-m-d', $kmrn);
+if ('' === $unit) {
+    //sum(a.hasilkerja)
+    $str2 = "select a.tanggal,a.tahuntanam,a.unit,a.kodeorg,sum(a.hasilkerja) as jjg,sum(a.hasilkerjakg) as berat,sum(a.upahkerja) as upah,\r\n        sum(a.upahpremi) as premi,sum(a.rupiahpenalty) as penalty,count(a.karyawanid) as jumlahhk  from ".$dbname.".kebun_prestasi_vw a\r\n        left join ".$dbname.".organisasi c\r\n        on substr(a.kodeorg,1,4)=c.kodeorganisasi\r\n        where c.induk = '".$pt."'  and a.tanggal between '".$kmrn."' and '".tanggalsystem($tgl2)."' group by a.tanggal,a.kodeorg";
+} else {
+    $str2 = "select a.tanggal,a.tahuntanam,a.unit,a.kodeorg,sum(a.hasilkerja) as jjg,sum(a.hasilkerjakg) as berat,sum(a.upahkerja) as upah,\r\n        sum(a.upahpremi) as premi,sum(a.rupiahpenalty) as penalty,count(a.karyawanid) as jumlahhk  from ".$dbname.".kebun_prestasi_vw a\r\n        where unit = '".$unit."'  and a.tanggal between '".$kmrn."' and '".tanggalsystem($tgl2)."' group by a.tanggal, a.kodeorg";
+}
+
+$qKmrn = mysql_query($str2) ;
+while ($rKmr = mysql_fetch_object($qKmrn)) {
+    $dzArrk[$rKmr->kodeorg][$rKmr->tanggal.'j'] = $rKmr->jjg;
+}
+$jumlahhari = count($tanggal);
+$res = mysql_query($str);
+if (mysql_num_rows($res) < 1) {
+    $jukol = $jumlahhari * 3 + 5;
+    echo '<tr class=rowcontent><td colspan='.$jukol.'>'.$_SESSION['lang']['tidakditemukan'].'</td></tr>';
+} else {
+    while ($bar = mysql_fetch_object($res)) {
+        $dzArr[$bar->kodeorg][$bar->tanggal] = $bar->tanggal;
+        $dzArr[$bar->kodeorg]['kodeorg'] = $bar->kodeorg;
+        $dzArr[$bar->kodeorg]['tahuntanam'] = $bar->tahuntanam;
+        $dzArr[$bar->kodeorg][$bar->tanggal.'j'] = $bar->berat;//$bar->jjg;
+        $dzArr[$bar->kodeorg][$bar->tanggal.'k'] = $bar->jjg;//$bar->berat;
+        $dzArr[$bar->kodeorg][$bar->tanggal.'h'] = $bar->jumlahhk;
+    }
+}
+
+if (!empty($dzArr)) {
+    foreach ($dzArr as $c => $key) {
+        $sort_kodeorg[] = $key['kodeorg'];
+        $sort_tahuntanam[] = $key['tahuntanam'];
+    }
+    array_multisort($sort_kodeorg, SORT_ASC, $sort_tahuntanam, SORT_ASC, $dzArr);
+}
+
+echo "<thead>\r\n        <tr>\r\n            <td rowspan=2 align=center>No.</td>\r\n            <td rowspan=2 align=center>".$_SESSION['lang']['afdeling']."</td>\r\n            <td rowspan=2 align=center>".$_SESSION['lang']['kodeblok']."</td>\r\n            <td rowspan=2 align=center>".$_SESSION['lang']['tahuntanam'].'</td>';
+foreach ($tanggal as $tang) {
+    $ting = explode('-', $tang);
+    $qwe = date('D', strtotime($tang));
+    echo '<td colspan=3 align=center>';
+    if ('Sun' === $qwe) {
+        echo '<font color=red>'.$ting[2].'</font>';
+    } else {
+        echo $ting[2];
+    }
+
+    echo '</td>';
+}
+echo '<td colspan=3 align=center>Total</td><td align=center>Rata2</td></tr><tr>';
+foreach ($tanggal as $tang) {
+    echo '<td align=center>'.$_SESSION['lang']['kg']."</td>\r\n            <td align=center>".$_SESSION['lang']['jjg']."</td>\r\n            <td align=center>".$_SESSION['lang']['jumlahhk'].'</td>';
+}
+echo '<td align=center>'.$_SESSION['lang']['kg']."</td>\r\n        <td align=center>".$_SESSION['lang']['jjg']."</td>\r\n        <td align=center>".$_SESSION['lang']['jumlahhk'].'</td><td align=center>'.$_SESSION['lang']['jjg']."</td></tr>  \r\n        </thead>\r\n\t<tbody>";
+$no = 0;
+//echoMessage(' arr ',$dzArr,true);
+foreach ($dzArr as $arey) {
+    ++$no;
+    echo "<tr class='rowcontent'>\r\n            <td align=center>".$no."</td>\r\n            <td align=center>".substr($arey['kodeorg'], 0, 6)."</td>\r\n            <td align=center>".$arey['kodeorg']."</td>\r\n            <td align=center>".$arey['tahuntanam'].'</td>';
+    $totalj = 0;
+    $totalk = 0;
+    $totalh = 0;
+    $totaltanpanol = 0;
+    $jumlahtanpanol = 0;
+    foreach ($tanggal as $tang) {
+        $dbg = '';
+        $tglkmrn = strtotime('-1 day', strtotime($tang));
+        $tglkmrn2 = date('Y-m-d', $tglkmrn);
+        if (0 !== $dzArrk[$arey['kodeorg']][$tglkmrn2.'j'] && 0 !== $arey[$tang.'j']) {
+            $dbg = 'bgcolor=red';
+        }
+
+        $qwe = date('D', strtotime($tang));
+        if ('Sun' === $qwe) {
+            echo '<td align=right '.$dbg.'><font color=red>'.number_format($arey[$tang.'j']).'</font></td>';
+            echo '<td align=right ><font color=red>'.number_format($arey[$tang.'k']).'</font></td>';
+            echo '<td align=right ><font color=red>'.number_format($arey[$tang.'h']).'</font></td>';
+        } else {
+            echo '<td align=right '.$dbg.'>'.number_format($arey[$tang.'j']).'</td>';
+            echo '<td align=right >'.number_format($arey[$tang.'k']).'</td>';
+            echo '<td align=right >'.number_format($arey[$tang.'h']).'</td>';
+        }
+
+        $total[$tang.'j'] += $arey[$tang.'j'];
+        $total[$tang.'k'] += $arey[$tang.'k'];
+        $total[$tang.'h'] += $arey[$tang.'h'];
+        $totalj += $arey[$tang.'j'];
+        $totalk += $arey[$tang.'k'];
+        $totalh += $arey[$tang.'h'];
+        if (0 < $arey[$tang.'j']) {
+            $totaltanpanol += $arey[$tang.'j'];
+            ++$jumlahtanpanol;
+        }
+    }
+    $rataj = $totaltanpanol / $jumlahtanpanol;
+    echo '<td align=right>'.number_format($totalj)."</td>\r\n            <td align=right>".number_format($totalk)."</td>\r\n            <td align=right>".number_format($totalh).'</td><td align=right>'.number_format($rataj).'</td></tr>';
+}
+echo "<tr class='rowcontent'>\r\n        <td colspan=4 align=center>Total</td>";
+$totalj = 0;
+$totalk = 0;
+$totalh = 0;
+foreach ($tanggal as $tang) {
+    echo '<td align=right>'.number_format($total[$tang.'j']).'</td>';
+    echo '<td align=right>'.number_format($total[$tang.'k']).'</td>';
+    echo '<td align=right>'.number_format($total[$tang.'h']).'</td>';
+    $totalj += $total[$tang.'j'];
+    $totalk += $total[$tang.'k'];
+    $totalh += $total[$tang.'h'];
+}
+echo '<td align=right>'.number_format($totalj)."</td>\r\n        <td align=right>".number_format($totalk)."</td>\r\n        <td align=right>".number_format($totalh).'</td><td></td></tr>';
+echo "</tbody>\r\n        <tfoot>\r\n        </tfoot>";
+
+?>
