@@ -1,0 +1,480 @@
+/* 
+ *   
+ * Bekasi Indonesia`2016
+ */
+        BODY{
+                margin-top:0px;
+                margin-right:1px;
+                margin-bottom:20px;
+                margin-left:1px;
+        font-family: "Arial",sans-serif,"Myriad Pro","Myriad Web","Tahoma";  
+                font-size:12px;
+        }
+        SELECT{
+                height:18px;
+                vertical-align:middle;
+                font-size:11px;
+        }
+
+    table .data{
+        background-color:#97AECA;
+                font-size:12px;
+        font-family: "Tahoma",sans-serif,"Myriad Pro","Myriad Web","Arial";
+    }
+        table .sortable thead{
+        background-color:#97AECA;
+                font-size:13px;
+                text-transform:capitalize;
+                cursor:pointer;
+                text-align:center;	
+    }
+        table .sortable, table .data  thead tr {
+        background-color:#56B5E7;
+        }
+
+        table .sortable thead tr td, table .data thead tr td{
+        background-color:#275370;
+        color:#A5C1D6;
+        text-transform:capitalize;	
+        }
+        thead tr td{
+        background-color:#275370;
+        color:#A5C1D6;
+        text-transform:capitalize;	
+        }
+
+        thead tr td:hover{
+                background-color:#97AECA;
+                color:#FFFFFF;
+                cursor:pointer;
+        }
+
+        table  .sortable thead td:hover, table .data  thead td:hover{
+                background-color:#97AECA;
+                color:#FFFFFF;
+        }
+
+    table tfoot{
+        background-color:#97AECA;
+                text-transform:capitalize;	    	
+    }
+    table tfoot td:hover{
+        background-color:#9eada8;	    	
+    }	
+        .head{
+                text-align:center;
+                background-color:#275370;
+                color:#A5C1D6;
+                text-transform:capitalize;	
+                }	
+        .head td:hover{
+                        background-color:#97AECA;
+                        color:#FFFFFF;
+                }
+    UL{
+        padding-left:20px;
+        margin-top:5px;
+        margin-bottom:1px;
+    }
+    OL{
+        padding-left:20px;
+        margin-top:5px;
+        margin-bottom:1px;
+    }
+        textarea{
+        border:#97AECA solid 1px;		
+        }
+
+/****************************************************************
+ * 
+ * box properties
+ * */
+  .x-box-tl {
+        background: transparent url(../images/box/corners.gif) no-repeat 0 0;
+    zoom:1;
+}
+
+.x-box-tc {
+        height: 8px;
+        background: transparent url(../images/box/tb.gif) repeat-x 0 0;
+        overflow: hidden;
+}
+
+.x-box-tr {
+        background: transparent url(../images/corners.gif) no-repeat right -8px;
+}
+
+.x-box-ml {
+        background: transparent url(../images/box/l.gif) repeat-y 0;
+        padding-left: 4px;
+        overflow: hidden;
+    zoom:1;
+}
+
+.x-box-mc {
+        background: #eee url(../images/box/tb.gif) repeat-x 0 -16px;
+        padding: 4px 10px;
+        font-family: "Tahoma",sans-serif,"Myriad Pro","Myriad Web","Arial","Helvetica";
+        color: #393939;
+        font-size: 12px;
+}
+
+.x-box-mc h3 {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 0 0 4px 0;
+    zoom:1;
+}
+
+.x-box-mr {
+        background: transparent url(../images/box/r.gif) repeat-y right;
+        padding-right: 4px;
+        overflow: hidden;
+}
+
+.x-box-bl {
+        background: transparent url(../images/box/corners.gif) no-repeat 0 -16px;
+    zoom:1;
+}
+
+.x-box-bc {
+        background: transparent url(../images/box/tb.gif) repeat-x 0 -8px;
+        height: 8px;
+        overflow: hidden;
+}
+
+.x-box-br {
+        background: transparent url(../images/box/corners.gif) no-repeat right -24px;
+}
+
+.x-box-tl, .x-box-bl {
+        padding-left: 8px;
+        overflow: hidden;
+}
+
+.x-box-tr, .x-box-br {
+        padding-right: 8px;
+        overflow: hidden;
+}
+
+.x-box-blue .x-box-bl, .x-box-blue .x-box-br, .x-box-blue .x-box-tl, .x-box-blue .x-box-tr {
+        background-image: url(../images/box/corners-blue.gif);
+}
+
+.x-box-blue .x-box-bc, .x-box-blue .x-box-mc, .x-box-blue .x-box-tc {
+        background-image: url(../images/box/tb-blue.gif);
+}
+
+.x-box-blue .x-box-mc {
+        background-color: #c3daf9;
+}
+
+.x-box-blue .x-box-mc h3 {
+        color: #17385b;
+}
+
+.x-box-blue .x-box-ml {
+        background-image: url(../images/box/l-blue.gif);
+}
+
+.x-box-blue .x-box-mr {
+        background-image: url(../images/box/r-blue.gif);
+}	
+/************************************************************/
+
+        .drag{
+            position:relative;
+                background-image:url('../images/titledialog.jpg');
+                background-repeat:repeat-x;
+                cursor:move;
+                }
+        .dragdyn{
+            position:relative;
+                background-image:url('../images/box/grad2.png');
+                cursor:move;
+                }
+        .rowcontent{
+        background-color:#D7EBFA;	
+    }	
+
+        .rowcontentClick{
+        background-color:#D7EBFA;
+                cursor:pointer;
+    }	
+
+        .rowcontentClick:hover{
+       font-weight:bolder;
+    }	
+        .rowcontentClick td:hover{
+                background-color:#FFF688;
+        }
+        tr.rowcontent:hover{
+                background-color:#FFFFFF;
+        }
+        tr.rowcontentClick:hover{
+                background-color:#FFFFFF;
+        }
+        .rowcontent td:hover{
+                background-color:#FFF688;
+        }	
+        .standardrow{
+           background-color:#E8F2FE;
+        }
+        .standardrow:hover{
+           cursor:pointer;
+           background-color:#DEDEDE;
+        }	
+
+        .mybutton{
+                 text-align:center;
+                         margin-top:0px;
+                         font-family:Tahoma;
+                         font-size:11px;
+                 font-weight:bolder;
+                         height:19px;
+                         vertical-align:middle;
+                         text-transform:capitalize;	 
+        }
+        .mytextbox{
+                 border:#97AECA solid 1px;
+                 color:#000000;
+                         font-family:Tahoma,Arial;
+                         font-size:11px;
+                 font-weight:bolder;
+                         height:17px; 
+        }	
+        .mybutton:hover {
+                                         text-transform:capitalize;
+                         }
+    .myinputtext{
+        border:#97AECA solid 1px;
+        height:14px;	
+                vertical-align:middle;
+        font-size:11px;
+    }
+        .myinputtextuppercase{
+                height:14px;
+                vertical-align:middle;
+                text-transform:uppercase;
+
+        }
+        .myinputtextlowercase{
+                height:14px;
+                vertical-align:middle;
+                text-transform:lowercase;	
+
+        }
+
+        .myinputtextnumber{
+            border:#97AECA solid 1px;
+                height:14px;
+                vertical-align:middle;
+                text-align:right;	
+        color:#165F10;
+                font-size:11px;
+        }
+        .myradio{
+                vertical-align:middle;	
+        }
+    .mycheckbox{
+                vertical-align:middle;   	
+    }	
+    .sortable{
+        background-color:#76B1DA;
+                font-size:12px;
+    }
+ .firsttd{
+   background-color:#C7D6E9;
+  } 
+  .mmgr{
+        list-style:none;
+        border-left:#aeaeae dotted 1px;
+  }
+  .arrow{
+        cursor:pointer;
+    border:0px;
+        vertical-align:middle;
+  }
+
+  .menuinput{
+   border:orange solid 1px;
+   background-color:#275370;
+  }
+  .newMenu{
+        color:#2222AA;
+        cursor:pointer;
+  }
+
+  .newMenu:hover{
+        background-color:#BDBDBD;
+  }
+  .dellicon{
+        cursor:pointer;
+        vertical-align:text-bottom;
+  }
+
+  .resicon{
+        cursor:pointer;
+        height:15px;
+  }
+
+   .delliconBig{
+        cursor:pointer;
+        vertical-align:text-bottom;
+        cursor:pointer;
+        height:45px;
+  } 
+   .resicon:hover{
+           height:17px;
+        }
+
+   .dellicon:hover{
+           height:14px;
+        }
+   .delliconBig:hover{
+           height:55px;
+        }	
+  .nexicon{
+        cursor:pointer;
+        vertical-align:text-bottom;
+        cursor:pointer;
+    }
+   .nexicon:hover{
+           height:22px;
+        } 
+   .lab:hover{
+        cursor:pointer;
+        background-color:#DEDEDE;
+    }  
+   .elink{
+        color:#4444FF;
+        padding-left:8px;
+        font-size:11px;
+        font-weight:550;
+   }
+   .elink:hover{
+        background-color:#E9740C;
+        cursor:pointer;
+        font-weight:bold;
+   }	
+   .login{
+         text-align:center;
+     background-image:url('../images/vista_icons_03.png');
+         background-repeat:no-repeat;
+         background-position:center;
+         vertical-align:top;   	
+   }
+   .loginhead{
+     font-size:13px; 
+         color:#0000aa; 	
+   }
+   .power{
+        font-size:9px;
+        color:#999999;
+   }
+  .power a:hover{
+        color:#999999;
+  }
+  .power a{
+        color:#999999;
+  }
+  .logout{
+         color:#FFFFFF;
+         cursor:pointer;
+  }
+  .box{
+        background-color:#76B1DA;
+                font-family: "Tahoma",sans-serif,"Myriad Pro","Myriad Web","Arial";
+                border:#3E71B2 solid 2px;
+                color:#000000;
+  }
+
+        .tab td{
+                background-image:url('../images/tab1.png');
+                cursor:pointer;
+                color:#333333;
+                font-size:13px;
+                padding-left:10px;
+        font-family: "Tahoma",sans-serif,"Myriad Pro","Myriad Web","Arial";		
+        }
+        .tab td:hover{
+                background-image:url('../images/tab3.png');
+                font-weight:bolder;
+        }	
+    .pBarBackground{
+        width:200px;
+                height:22px;
+                border:#444444 solid 1px;
+                background-color:#ffffff;
+    }
+    .pBarTop{
+        width:0px;
+                height:22px;
+                background-color:#1E5896;
+                text-align:center;
+    }
+        .pLegend{
+                font-weight:bolder;
+        }
+        .editbtn{
+                height:16px;
+        }
+        .closebtn:hover{
+                cursor:pointer;
+        }
+        
+.overlay {
+    /* Height & width depends on how you want to reveal the overlay (see JS below) */    
+    height: 100%;
+    width: 0;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    background-color: rgb(0,0,0); /* Black fallback color */
+    background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+
+/* Position the content inside the overlay */
+.overlay-content {
+    position: relative;
+    top: 25%; /* 25% from the top */
+    width: 100%; /* 100% width */
+    text-align: center; /* Centered text/links */
+    margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+
+/* The navigation links inside the overlay */
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block; /* Display block instead of inline */
+    transition: 0.3s; /* Transition effects on hover (color) */
+}
+
+/* When you mouse over the navigation links, change their color */
+.overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+}
+
+/* Position the close button (top right corner) */
+.overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+}
+
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+@media screen and (max-height: 450px) {
+    .overlay a {font-size: 20px}
+    .overlay .closebtn {
+        font-size: 40px;
+        top: 15px;
+        right: 35px;
+    }
+}        

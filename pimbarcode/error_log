@@ -1,0 +1,14 @@
+[21-Jan-2020 06:40:34 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:11 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:11 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:12 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:12 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:13 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:13 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:13 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:13 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:14 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:42:14 UTC] PHP Parse error:  syntax error, unexpected '$tgl' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 06:45:12 UTC] PHP Parse error:  syntax error, unexpected '$data' (T_VARIABLE) in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 77
+[21-Jan-2020 07:21:00 UTC] PHP Fatal error:  Call to a member function Simpan() on null in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 86
+[21-Jan-2020 07:22:58 UTC] PHP Fatal error:  Call to a member function Simpan() on null in /home/mitraagr/public_html/pimws/barcode/application/controllers/Auth.php on line 86

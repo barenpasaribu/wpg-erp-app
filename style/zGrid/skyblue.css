@@ -1,0 +1,8 @@
+.zGrid {
+    font:normal 12px arial;
+}
+
+.zGrid thead {
+    background-color:rgb(100,100,250);
+    color:white;
+}
